@@ -76,3 +76,36 @@ logMsg(addAll(7, 2, 1)) // 10
 logMsg(addAll(7, 2)) // 9
 logMsg(sumAll(7, 2)) // 11
 logMsg(sumAll(undefined, 2)) // to skip a
+
+// Rest parameters should come at the end
+
+const total = (a: number, ...nums: number[]): number => {
+    return a + nums.reduce((prev, curr) => prev + curr)
+}
+
+logMsg(total(1, 2, 3));
+
+const infinite = () => {
+   let i: number = 1; 
+   while(true){
+       i++
+        if(i > 100) break
+   }
+}
+
+// custom type guard
+//
+const isNumber = (value: any): boolean => {
+    return typeof value === 'number'
+        ? true : false;
+}
+
+const createError = (errorMsg: string): never => {
+    throw new Error(errorMsg);
+}
+// use of never type
+const numberOrString = (value: number | string): string => {
+    if(typeof value === 'string') return 'string';
+    if(isNumber(value)) return 'number';
+    return createError("This should never happen");
+} 
