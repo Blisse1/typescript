@@ -3,10 +3,10 @@
 // Partial
 
 interface Assignment {
-   studentId: string, 
-   title: string, 
-   grade: number, 
-   verified?: boolean, 
+    studentId: string, 
+    title: string, 
+    grade: number, 
+    verified?: boolean, 
 }
 
 const updateAssignment = (assign: Assignment, propsToUpdate: Partial<Assignment>)
@@ -45,7 +45,7 @@ const hexColorMap: Record<string, string> = {
 }
 
 type Student = "Sara" | "Kelly"; // aquí el "|" significa ambos.
-type LetterGrades = "A" | "B" | "C" | "D" | "U";
+    type LetterGrades = "A" | "B" | "C" | "D" | "U";
 
 const finalGrades: Record<Student, LetterGrades> = {
     Sara: "A",
@@ -53,8 +53,8 @@ const finalGrades: Record<Student, LetterGrades> = {
 }
 
 interface Grades {
-   assign1: number,
-   assign2: number,
+    assign1: number,
+    assign2: number,
 }
 
 const gradeData: Record<Student, Grades> = {
@@ -86,3 +86,52 @@ type adjustedGrade = Exclude<LetterGrades, "U">;
 
 type highGrades = Extract<LetterGrades, "A" | "B">
 // And this is gonna be only A and B because we extracted them
+
+// Nonnullable
+type AllPossibleGrades = "Dave" | "John" | null | undefined;
+
+type NamesOnly = NonNullable<AllPossibleGrades>; // this excludes null and undefined
+
+// Return type
+//
+// type newAssign = {title: string, points: number};
+
+const createNewAssign = (title: string, points: number) => {
+    return { title, points };
+}
+
+type NewAssign = ReturnType<typeof createNewAssign>;
+// now if we change create new assign its always going to update our ReturnType
+
+const tsAssign: NewAssign = createNewAssign("Utility Types", 100);
+console.log(tsAssign);
+
+// Parameters
+type AssignParams = Parameters<typeof createNewAssign>;
+
+const assignArgs: AssignParams = ["Generics", 100];
+const tsAssign2: NewAssign = createNewAssign(...assignArgs);
+console.log(tsAssign2);
+
+// Awaited - helps us with the ReturnType of a Promise
+
+interface User {
+    user: number,
+    name: string,
+    username: string,
+    email: string,
+}
+const fetchUsers = async(): Promise<User[]> => {
+    const data = await fetch(
+        'https://jsonplaceholder.typicode.com/users'
+    ).then(res => {
+            return res.json()   
+        }).catch(err => {
+            if(err instanceof Error) console.log(err.message)
+        })
+    return data
+}
+
+type FetchUsersReturnType = Awaited<ReturnType<typeof fetchUsers>>;
+
+fetchUsers().then(users => console.log(users));
